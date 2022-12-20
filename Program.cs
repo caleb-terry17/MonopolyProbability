@@ -6,18 +6,21 @@ namespace Monopoly
     {
         static void Main(string[] args)
         {
-            for (int i = 0; i < 12; ++i) 
-            {
-                double x = DiceRoll.P(i);
-                Console.WriteLine("{0:0.00}", x);
-            }
-
             BoardProb board = new BoardProb(0, 40);
-            List<double> rolls2 = board.RollProb(2);
+            List<BoardProb.BoardSpot> rolls2 = board.RollProb(2);
             double sum = 0;
             rolls2.ForEach(prob => 
             {
-                sum += prob;
+                sum += prob.Prob;
+                Console.WriteLine(prob);
+            });
+            Console.WriteLine(sum);
+
+            List<BoardProb.BoardSpot> rolls3 = board.RollProb(3);
+            sum = 0;
+            rolls2.ForEach(prob => 
+            {
+                sum += prob.Prob;
                 Console.WriteLine(prob);
             });
             Console.WriteLine(sum);
