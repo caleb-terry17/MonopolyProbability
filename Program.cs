@@ -6,8 +6,7 @@ namespace Monopoly
     {
         static void Main(string[] args)
         {
-            RollProb board = new RollProb(0, 40);
-            List<RollProb.BoardSpot> rolls2 = board.ComputeProb(2);
+            List<RollProb.BoardSpot> rolls2 = RollProb.Compute(2);
             double sum = 0;
             rolls2.ForEach(prob => 
             {
@@ -16,7 +15,7 @@ namespace Monopoly
             });
             Console.WriteLine(sum);
 
-            List<RollProb.BoardSpot> rolls3 = board.ComputeProb(3);
+            List<RollProb.BoardSpot> rolls3 = RollProb.Compute(3);
             sum = 0;
             rolls2.ForEach(prob => 
             {

@@ -16,7 +16,7 @@ namespace Monopoly.Functionality
          * P(X = 11) = 2/36
          * P(X = 12) = 1/36
          */
-        static public double P(int x)
+        public static double P(int x)
         {
             return (x < 8) ? (double)(x - 1) / 36 : (double)(13 - x) / 36;
         }

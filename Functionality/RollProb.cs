@@ -1,5 +1,6 @@
 namespace Monopoly.Functionality
 {
+    // Computes the probability for each possible number of spaces from the current position
     public class RollProb
     {
         public class BoardSpot
@@ -24,18 +25,12 @@ namespace Monopoly.Functionality
             }
         }
         
-        private int startPos { get; set; }  // starting square on board (0 would be start)
-        private int LOWEST_ROLL = 2;
-        private int HIGHEST_ROLL = 12;
-
-        public RollProb(int startPos, int boardSize) 
-        {
-            this.startPos = startPos;
-        }
+        private static int LOWEST_ROLL = 2;
+        private static int HIGHEST_ROLL = 12;
 
         // probability to land on the next x spots given a # of rolls
         // the current position is referred to as "spot 0"
-        public List<BoardSpot> ComputeProb(int roll)
+        public static List<BoardSpot> Compute(int roll)
         {
             // initial matrix
             List<List<BoardSpot>> matrix = NewMatrix(HIGHEST_ROLL - LOWEST_ROLL + 1);
@@ -76,7 +71,7 @@ namespace Monopoly.Functionality
             return vec;
         }
 
-        private List<List<BoardSpot>> NewMatrix(int cols)
+        private static List<List<BoardSpot>> NewMatrix(int cols)
         {
             List<List<BoardSpot>> board = new List<List<BoardSpot>>();
 
@@ -92,7 +87,7 @@ namespace Monopoly.Functionality
             return board;
         }
 
-        private void MatrixMult(ref List<List<BoardSpot>> matrix, List<BoardSpot> vec) 
+        private static void MatrixMult(ref List<List<BoardSpot>> matrix, List<BoardSpot> vec) 
         {
             for (int row = 0; row < matrix.Count(); ++row) 
             {
@@ -103,7 +98,7 @@ namespace Monopoly.Functionality
             }
         }
 
-        private void PrintMatrix(List<List<BoardSpot>> matrix)
+        private static void PrintMatrix(List<List<BoardSpot>> matrix)
         {
             matrix.ForEach((row) => 
             {
@@ -115,7 +110,7 @@ namespace Monopoly.Functionality
             });
         }
 
-        private double SumMatrix(List<List<BoardSpot>> matrix) 
+        private static double SumMatrix(List<List<BoardSpot>> matrix) 
         {
             double sum = 0;
 
@@ -130,7 +125,7 @@ namespace Monopoly.Functionality
             return sum;
         }
 
-        private List<BoardSpot> InitVector(List<List<BoardSpot>> matrix)
+        private static List<BoardSpot> InitVector(List<List<BoardSpot>> matrix)
         {
             List<BoardSpot> vec = new List<BoardSpot>();
 
@@ -157,7 +152,7 @@ namespace Monopoly.Functionality
             return vec;
         }
 
-        private void PrintVector(List<BoardSpot> vec)
+        private static void PrintVector(List<BoardSpot> vec)
         {
             vec.ForEach((spot) =>
             {
@@ -165,7 +160,7 @@ namespace Monopoly.Functionality
             });
         }
 
-        private double SumVector(List<BoardSpot> vec)
+        private static double SumVector(List<BoardSpot> vec)
         {
             double sum = 0;
 
