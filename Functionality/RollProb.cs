@@ -65,6 +65,26 @@ namespace Monopoly.Functionality
             return vec;
         }
 
+        public static void PrintVector(List<BoardSpot> vec)
+        {
+            vec.ForEach((spot) =>
+            {
+                Console.WriteLine(spot.ToString() + " ");
+            });
+        }
+
+        public static double SumVector(List<BoardSpot> vec)
+        {
+            double sum = 0;
+
+            vec.ForEach((spot) =>
+            {
+                sum += spot.Prob;
+            });
+
+            return sum;
+        }
+
         private static List<List<BoardSpot>> NewMatrix(int cols)
         {
             List<List<BoardSpot>> board = new List<List<BoardSpot>>();
@@ -144,26 +164,6 @@ namespace Monopoly.Functionality
             }
 
             return vec;
-        }
-
-        private static void PrintVector(List<BoardSpot> vec)
-        {
-            vec.ForEach((spot) =>
-            {
-                Console.WriteLine(spot.ToString() + " ");
-            });
-        }
-
-        private static double SumVector(List<BoardSpot> vec)
-        {
-            double sum = 0;
-
-            vec.ForEach((spot) =>
-            {
-                sum += spot.Prob;
-            });
-
-            return sum;
         }
     }
 }
