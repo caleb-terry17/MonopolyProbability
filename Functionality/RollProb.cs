@@ -29,7 +29,12 @@ namespace Monopoly.Functionality
         private static int LOWEST_ROLL = 2;
         private static int HIGHEST_ROLL = 12;
 
-        public RollProb(int roll = 1) 
+        public RollProb()
+        {
+            Probs = new List<Spot>();
+        }
+
+        public RollProb(int roll) 
         {
             Probs = Compute(roll);
         }
@@ -48,7 +53,7 @@ namespace Monopoly.Functionality
                     c.Probs.Add(b.Probs[bPtr]);
                     bPtr++;
                 }
-                else if (bPtr >= a.Probs.Count())
+                else if (bPtr >= b.Probs.Count())
                 {
                     c.Probs.Add(a.Probs[aPtr]);
                     aPtr++;
@@ -71,11 +76,6 @@ namespace Monopoly.Functionality
                     bPtr++;
                 }
             }
-
-            c.Probs.ForEach((spot) =>
-            {
-                spot.Prob /= 2;
-            });
 
             return c;
         }
