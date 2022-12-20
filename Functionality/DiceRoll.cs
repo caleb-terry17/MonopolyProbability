@@ -18,7 +18,7 @@ namespace Monopoly.Functionality
          */
         static public double P(int x)
         {
-            return ((x - 1) < 8) ? (double)x / 36 : (double)(13 - x) / 36;
+            return (x < 8) ? (double)(x - 1) / 36 : (double)(13 - x) / 36;
         }
     }
 }
