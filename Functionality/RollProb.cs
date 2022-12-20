@@ -25,13 +25,13 @@ namespace Monopoly.Functionality
             }
         }
         
-        public List<Spot> Probs;
+        public List<Spot> Probs { get; set; }
         private static int LOWEST_ROLL = 2;
         private static int HIGHEST_ROLL = 12;
 
-        public RollProb() 
+        public RollProb(int roll = 1) 
         {
-            Probs = new List<Spot>();
+            Probs = Compute(roll);
         }
 
         public static RollProb operator +(RollProb a, RollProb b)
@@ -82,7 +82,7 @@ namespace Monopoly.Functionality
 
         // probability to land on the next x spots given a # of rolls
         // the current position is referred to as "spot 0"
-        public static List<Spot> Compute(int roll)
+        private static List<Spot> Compute(int roll)
         {
             // initial matrix
             List<List<Spot>> matrix = NewMatrix(HIGHEST_ROLL - LOWEST_ROLL + 1);

@@ -6,29 +6,21 @@ namespace Monopoly
     {
         static void Main(string[] args)
         {
-            // List<RollProb> rollProb = new List<RollProb>();
-            // for (int i = 1; i < 3; ++i)
-            // {
-            //     Console.WriteLine("i: " + i);
-            //     RollProb roll = new RollProb();
-            //     roll.Probs = RollProb.Compute(i);
-            //     RollProb.PrintVector(roll.Probs);
-            //     Console.WriteLine(RollProb.SumVector(roll.Probs));
-            //     Console.WriteLine();
-            //     rollProb.Add(roll);
-            // }
-
-            // RollProb rolls = rollProb[0] + rollProb[1];
-            // RollProb.PrintVector(rolls.Probs);
-            // Console.WriteLine(RollProb.SumVector(rolls.Probs));
-
-            Console.Write("Enter # of Spaces on Board: ");
-            int boardSpaces = Console.Read();
+            // Console.Write("Enter # of Spaces on Board: ");
+            // int boardSpaces = Console.Read();
 
             Console.Write("Enter # of rolls you'd like to look forward on: ");
-            int numRolls = Console.Read();
-
+            string line = Console.ReadLine();
+            int numRolls = Convert.ToInt32(line);
+            Console.WriteLine(numRolls);
             
+            RollProb total = new RollProb(1);
+            for (int roll = 2; roll < numRolls; ++roll)
+            {
+                total += new RollProb(roll);
+            }
+            RollProb.PrintVector(total.Probs);
+            Console.WriteLine(RollProb.SumVector(total.Probs));
         }
     }
 }
