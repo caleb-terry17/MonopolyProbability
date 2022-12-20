@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Monopoly.Constants;
 
 namespace Monopoly
 {
@@ -6,7 +6,11 @@ namespace Monopoly
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            for (int i = 0; i < 12; ++i) 
+            {
+                double x = DiceRoll.P(i);
+                Console.WriteLine("{0:0.00}", x);
+            }
         }
     }
 }
