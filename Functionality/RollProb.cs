@@ -51,17 +51,11 @@ namespace Monopoly.Functionality
 
             for (int iter = 1; iter < roll; ++iter)
             {
-                PrintMatrix(matrix);
-                Console.WriteLine(SumMatrix(matrix) + "\n");
                 // compute possibilities for roll iter + 1
                 MatrixMult(ref matrix, vec);
-                PrintMatrix(matrix);
-                Console.WriteLine(SumMatrix(matrix) + "\n");
 
                 // create new vector and store probabilities in it 
                 vec = InitVector(matrix);
-                PrintVector(vec);
-                Console.WriteLine(SumVector(vec) + "\n");
 
                 // create new matrix for next iter
                 matrix = NewMatrix(vec.Count());

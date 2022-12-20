@@ -17,7 +17,7 @@ namespace Monopoly
 
             List<RollProb.BoardSpot> rolls3 = RollProb.Compute(3);
             sum = 0;
-            rolls2.ForEach(prob => 
+            rolls3.ForEach(prob => 
             {
                 sum += prob.Prob;
                 Console.WriteLine(prob);
