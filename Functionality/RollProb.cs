@@ -3,12 +3,12 @@ namespace Monopoly.Functionality
     // Computes the probability for each possible number of spaces from the current position
     public class RollProb
     {
-        public class BoardSpot
+        public class Spot
         {
             public int TotalSpots { get; set; }  // total # of spots from start pos
             public double Prob { get; set; }  // the probability of landing in the current spot
 
-            public BoardSpot(int totalSpots, double prob = 0)
+            public Spot(int totalSpots, double prob = 0)
             {
                 this.TotalSpots = totalSpots;
                 this.Prob = prob;
@@ -19,28 +19,80 @@ namespace Monopoly.Functionality
                 return "(" + this.TotalSpots.ToString() + "," + Math.Round(this.Prob, 4).ToString() + ")";
             }
 
-            public static BoardSpot operator *(BoardSpot a, BoardSpot b)
+            public static Spot operator *(Spot a, Spot b)
             {
-                return new BoardSpot(a.TotalSpots + b.TotalSpots, a.Prob * b.Prob);
+                return new Spot(a.TotalSpots + b.TotalSpots, a.Prob * b.Prob);
             }
         }
         
+        public List<Spot> Probs;
         private static int LOWEST_ROLL = 2;
         private static int HIGHEST_ROLL = 12;
 
+        public RollProb() 
+        {
+            Probs = new List<Spot>();
+        }
+
+        public static RollProb operator +(RollProb a, RollProb b)
+        {
+            RollProb c = new RollProb();
+
+            int aPtr = 0;
+            int bPtr = 0;
+            
+            while (aPtr < a.Probs.Count() || bPtr < b.Probs.Count())
+            {
+                if (aPtr >= a.Probs.Count())
+                {
+                    c.Probs.Add(b.Probs[bPtr]);
+                    bPtr++;
+                }
+                else if (bPtr >= a.Probs.Count())
+                {
+                    c.Probs.Add(a.Probs[aPtr]);
+                    aPtr++;
+                }
+                else if (a.Probs[aPtr].TotalSpots < b.Probs[bPtr].TotalSpots)
+                {
+                    c.Probs.Add(a.Probs[aPtr]);
+                    aPtr++;
+                }
+                else if (a.Probs[aPtr].TotalSpots > b.Probs[bPtr].TotalSpots)
+                {
+                    c.Probs.Add(b.Probs[bPtr]);
+                    bPtr++;
+                }
+                else
+                {
+                    Spot spot = new Spot(a.Probs[aPtr].TotalSpots, a.Probs[aPtr].Prob + b.Probs[bPtr].Prob);
+                    c.Probs.Add(spot);
+                    aPtr++;
+                    bPtr++;
+                }
+            }
+
+            c.Probs.ForEach((spot) =>
+            {
+                spot.Prob /= 2;
+            });
+
+            return c;
+        }
+
         // probability to land on the next x spots given a # of rolls
         // the current position is referred to as "spot 0"
-        public static List<BoardSpot> Compute(int roll)
+        public static List<Spot> Compute(int roll)
         {
             // initial matrix
-            List<List<BoardSpot>> matrix = NewMatrix(HIGHEST_ROLL - LOWEST_ROLL + 1);
+            List<List<Spot>> matrix = NewMatrix(HIGHEST_ROLL - LOWEST_ROLL + 1);
 
             // initial vector
-            List<BoardSpot> vec = new List<BoardSpot>();
+            List<Spot> vec = new List<Spot>();
             // initialize with initial probabilities
             for (int i = LOWEST_ROLL; i <= HIGHEST_ROLL; ++i) 
             {
-                vec.Add(new BoardSpot(i, DiceRoll.P(i)));
+                vec.Add(new Spot(i, DiceRoll.P(i)));
             }
 
             // just return vector of probabilities
@@ -65,7 +117,7 @@ namespace Monopoly.Functionality
             return vec;
         }
 
-        public static void PrintVector(List<BoardSpot> vec)
+        public static void PrintVector(List<Spot> vec)
         {
             vec.ForEach((spot) =>
             {
@@ -73,7 +125,7 @@ namespace Monopoly.Functionality
             });
         }
 
-        public static double SumVector(List<BoardSpot> vec)
+        public static double SumVector(List<Spot> vec)
         {
             double sum = 0;
 
@@ -85,23 +137,23 @@ namespace Monopoly.Functionality
             return sum;
         }
 
-        private static List<List<BoardSpot>> NewMatrix(int cols)
+        private static List<List<Spot>> NewMatrix(int cols)
         {
-            List<List<BoardSpot>> board = new List<List<BoardSpot>>();
+            List<List<Spot>> board = new List<List<Spot>>();
 
             for (int row = LOWEST_ROLL; row <= HIGHEST_ROLL; ++row) 
             {
-                board.Add(new List<BoardSpot>());
+                board.Add(new List<Spot>());
                 for (int col = 0; col < cols; ++col)
                 {
-                    board[row - LOWEST_ROLL].Add(new BoardSpot(row, DiceRoll.P(row)));
+                    board[row - LOWEST_ROLL].Add(new Spot(row, DiceRoll.P(row)));
                 }
             }
 
             return board;
         }
 
-        private static void MatrixMult(ref List<List<BoardSpot>> matrix, List<BoardSpot> vec) 
+        private static void MatrixMult(ref List<List<Spot>> matrix, List<Spot> vec) 
         {
             for (int row = 0; row < matrix.Count(); ++row) 
             {
@@ -112,7 +164,7 @@ namespace Monopoly.Functionality
             }
         }
 
-        private static void PrintMatrix(List<List<BoardSpot>> matrix)
+        private static void PrintMatrix(List<List<Spot>> matrix)
         {
             matrix.ForEach((row) => 
             {
@@ -124,7 +176,7 @@ namespace Monopoly.Functionality
             });
         }
 
-        private static double SumMatrix(List<List<BoardSpot>> matrix) 
+        private static double SumMatrix(List<List<Spot>> matrix) 
         {
             double sum = 0;
 
@@ -139,9 +191,9 @@ namespace Monopoly.Functionality
             return sum;
         }
 
-        private static List<BoardSpot> InitVector(List<List<BoardSpot>> matrix)
+        private static List<Spot> InitVector(List<List<Spot>> matrix)
         {
-            List<BoardSpot> vec = new List<BoardSpot>();
+            List<Spot> vec = new List<Spot>();
 
             int rows = matrix.Count();
             int cols = matrix[0].Count();
@@ -151,14 +203,14 @@ namespace Monopoly.Functionality
 
             for (int row = minSpots; row <= maxSpots; ++row)
             {
-                vec.Add(new BoardSpot(row));
+                vec.Add(new Spot(row));
             }
 
             for (int row = 0; row < rows; ++row)
             {
                 for (int col = 0; col < cols; ++col)
                 {
-                    BoardSpot spot = matrix[row][col];
+                    Spot spot = matrix[row][col];
                     vec[spot.TotalSpots - minSpots].Prob += spot.Prob;
                 }
             }
