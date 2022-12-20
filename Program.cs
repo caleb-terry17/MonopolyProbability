@@ -1,4 +1,4 @@
-﻿using Monopoly.Constants;
+﻿using Monopoly.Functionality;
 
 namespace Monopoly
 {

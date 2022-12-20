@@ -1,4 +1,4 @@
-namespace Monopoly.Constants 
+namespace Monopoly.Functionality
 {
     public class DiceRoll 
     {
