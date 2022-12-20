@@ -14,10 +14,13 @@ namespace Monopoly
 
             BoardProb board = new BoardProb(0, 40);
             List<double> rolls2 = board.RollProb(2);
+            double sum = 0;
             rolls2.ForEach(prob => 
             {
+                sum += prob;
                 Console.WriteLine(prob);
             });
+            Console.WriteLine(sum);
         }
     }
 }

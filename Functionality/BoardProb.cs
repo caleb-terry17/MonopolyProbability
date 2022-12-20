@@ -19,7 +19,7 @@ namespace Monopoly.Functionality
         {
             if (roll == 1) 
             {
-
+                // NEED TO IMPLEMENT
             }
 
             int maxSpots = roll * HIGHEST_ROLL;
