@@ -11,6 +11,13 @@ namespace Monopoly
                 double x = DiceRoll.P(i);
                 Console.WriteLine("{0:0.00}", x);
             }
+
+            BoardProb board = new BoardProb(0, 40);
+            List<double> rolls2 = board.RollProb(2);
+            rolls2.ForEach(prob => 
+            {
+                Console.WriteLine(prob);
+            });
         }
     }
 }
