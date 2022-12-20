@@ -1,57 +1,7 @@
 namespace Monopoly.Functionality
 {
-    public class BoardProb
+    public class RollProb
     {
-        private int startPos { get; set; }  // starting square on board (0 would be start)
-        private int boardSize { get; set; }  // number of spots on board
-        private int LOWEST_ROLL = 2;
-        private int HIGHEST_ROLL = 12;
-
-        public BoardProb(int startPos, int boardSize) 
-        {
-            this.startPos = startPos;
-            this.boardSize = boardSize;
-        }
-
-        // probability to land on the next x spots given a # of rolls
-        // the current position is referred to as "spot 0"
-        public List<BoardSpot> RollProb(int roll)
-        {
-            // just return vector of probabilities
-            if (roll == 1) 
-            {
-                // NEED TO IMPLEMENT
-            }
-
-            // initial matrix
-            List<List<BoardSpot>> matrix = NewMatrix(HIGHEST_ROLL - LOWEST_ROLL + 1);
-
-            // initial vector
-            List<BoardSpot> vec = new List<BoardSpot>();
-            // initialize with initial probabilities
-            for (int i = LOWEST_ROLL; i <= HIGHEST_ROLL; ++i) 
-            {
-                vec.Add(new BoardSpot(i, DiceRoll.P(i)));
-            }
-
-            for (int iter = 1; iter < roll; ++iter)
-            {
-                // compute possibilities for roll iter + 1
-                MatrixMult(ref matrix, vec);
-
-                // create new vector and store probabilities in it 
-                vec = InitVector(matrix);
-
-                // create new matrix for next iter
-                matrix = NewMatrix(vec.Count());
-            }
-
-            // compute probabilities
-            vec = InitVector(matrix);
-
-            return vec;
-        }
-
         public class BoardSpot
         {
             public int TotalSpots { get; set; }  // total # of spots from start pos
@@ -65,7 +15,7 @@ namespace Monopoly.Functionality
 
             public override string ToString()
             {
-                return "(" + this.TotalSpots.ToString() + "," + this.Prob.ToString() + ")";
+                return "(" + this.TotalSpots.ToString() + "," + Math.Round(this.Prob, 4).ToString() + ")";
             }
 
             public static BoardSpot operator *(BoardSpot a, BoardSpot b)
@@ -73,12 +23,64 @@ namespace Monopoly.Functionality
                 return new BoardSpot(a.TotalSpots + b.TotalSpots, a.Prob * b.Prob);
             }
         }
+        
+        private int startPos { get; set; }  // starting square on board (0 would be start)
+        private int LOWEST_ROLL = 2;
+        private int HIGHEST_ROLL = 12;
+
+        public RollProb(int startPos, int boardSize) 
+        {
+            this.startPos = startPos;
+        }
+
+        // probability to land on the next x spots given a # of rolls
+        // the current position is referred to as "spot 0"
+        public List<BoardSpot> ComputeProb(int roll)
+        {
+            // initial matrix
+            List<List<BoardSpot>> matrix = NewMatrix(HIGHEST_ROLL - LOWEST_ROLL + 1);
+
+            // initial vector
+            List<BoardSpot> vec = new List<BoardSpot>();
+            // initialize with initial probabilities
+            for (int i = LOWEST_ROLL; i <= HIGHEST_ROLL; ++i) 
+            {
+                vec.Add(new BoardSpot(i, DiceRoll.P(i)));
+            }
+
+            // just return vector of probabilities
+            if (roll == 1) 
+            {
+                return vec;
+            }
+
+            for (int iter = 1; iter < roll; ++iter)
+            {
+                PrintMatrix(matrix);
+                Console.WriteLine(SumMatrix(matrix) + "\n");
+                // compute possibilities for roll iter + 1
+                MatrixMult(ref matrix, vec);
+                PrintMatrix(matrix);
+                Console.WriteLine(SumMatrix(matrix) + "\n");
+
+                // create new vector and store probabilities in it 
+                vec = InitVector(matrix);
+                PrintVector(vec);
+                Console.WriteLine(SumVector(vec) + "\n");
+
+                // create new matrix for next iter
+                matrix = NewMatrix(vec.Count());
+            }
+
+            // probabilities are stored in vec list => return that
+            return vec;
+        }
 
         private List<List<BoardSpot>> NewMatrix(int cols)
         {
             List<List<BoardSpot>> board = new List<List<BoardSpot>>();
 
-            for (int row = LOWEST_ROLL; row < HIGHEST_ROLL; ++row) 
+            for (int row = LOWEST_ROLL; row <= HIGHEST_ROLL; ++row) 
             {
                 board.Add(new List<BoardSpot>());
                 for (int col = 0; col < cols; ++col)
@@ -103,14 +105,29 @@ namespace Monopoly.Functionality
 
         private void PrintMatrix(List<List<BoardSpot>> matrix)
         {
-            for (int row = 0; row < matrix.Count(); ++row)
+            matrix.ForEach((row) => 
             {
-                for (int col = 0; col < matrix[row].Count(); ++col)
+                row.ForEach((spot) =>
                 {
-                    Console.Write(matrix[row][col].ToString() + " ");
-                }
+                    Console.Write(spot.ToString() + " ");
+                });
                 Console.Write("\n");
-            }
+            });
+        }
+
+        private double SumMatrix(List<List<BoardSpot>> matrix) 
+        {
+            double sum = 0;
+
+            matrix.ForEach((row) =>
+            {
+                row.ForEach((spot) =>
+                {
+                    sum += spot.Prob;
+                });
+            });
+
+            return sum;
         }
 
         private List<BoardSpot> InitVector(List<List<BoardSpot>> matrix)
@@ -138,6 +155,26 @@ namespace Monopoly.Functionality
             }
 
             return vec;
+        }
+
+        private void PrintVector(List<BoardSpot> vec)
+        {
+            vec.ForEach((spot) =>
+            {
+                Console.WriteLine(spot.ToString() + " ");
+            });
+        }
+
+        private double SumVector(List<BoardSpot> vec)
+        {
+            double sum = 0;
+
+            vec.ForEach((spot) =>
+            {
+                sum += spot.Prob;
+            });
+
+            return sum;
         }
     }
 }
