@@ -80,6 +80,23 @@ namespace Monopoly.Functionality
             return c;
         }
 
+        public static RollProb GetJointProb(int rolls)
+        {
+            RollProb total = new RollProb(1);
+
+            for (int roll = 2; roll <= rolls; ++roll)
+            {
+                total += new RollProb(roll);
+            }
+
+            total.Probs.ForEach((spot) =>
+            {
+                spot.Prob /= rolls;
+            });
+
+            return total;
+        }
+
         // probability to land on the next x spots given a # of rolls
         // the current position is referred to as "spot 0"
         private static List<Spot> Compute(int roll)
