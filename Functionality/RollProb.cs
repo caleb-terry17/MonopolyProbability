@@ -153,14 +153,7 @@ namespace Monopoly.Functionality
 
         public static double SumVector(List<Spot> vec)
         {
-            double sum = 0;
-
-            vec.ForEach((spot) =>
-            {
-                sum += spot.Prob;
-            });
-
-            return sum;
+            return vec.Sum(spot => spot.Prob);
         }
 
         private static List<List<Spot>> NewMatrix(int cols)

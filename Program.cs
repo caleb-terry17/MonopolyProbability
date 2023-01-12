@@ -6,6 +6,13 @@ namespace Monopoly
     {
         static void Main(string[] args)
         {
+            // testing
+            Console.WriteLine(ExpectedRoll.Ev());
+
+
+            // testing
+
+
             // Console.Write("Enter # of Spaces on Board: ");
             // int boardSpaces = Console.Read();
 
