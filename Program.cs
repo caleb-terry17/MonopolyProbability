@@ -8,8 +8,8 @@ namespace Monopoly
         {
             // testing
             Console.WriteLine(ExpectedRoll.Ev());
-
-
+            Console.WriteLine(ExpectedRoll.Er(40));
+            return;
             // testing
 
 
