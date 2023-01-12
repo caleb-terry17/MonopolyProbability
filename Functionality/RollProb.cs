@@ -97,6 +97,20 @@ namespace Monopoly.Functionality
             return total;
         }
 
+        // computes the probabilities for a single roll and inserts into a list
+        internal static List<Spot> SingleRollProb()
+        {
+            // initial vector
+            List<Spot> vec = new List<Spot>();
+            // initialize with initial probabilities
+            for (int i = LOWEST_ROLL; i <= HIGHEST_ROLL; ++i) 
+            {
+                vec.Add(new Spot(i, DiceRoll.P(i)));
+            }
+            
+            return vec;
+        }
+
         // probability to land on the next x spots given a # of rolls
         // the current position is referred to as "spot 0"
         private static List<Spot> Compute(int roll)
@@ -105,12 +119,7 @@ namespace Monopoly.Functionality
             List<List<Spot>> matrix = NewMatrix(HIGHEST_ROLL - LOWEST_ROLL + 1);
 
             // initial vector
-            List<Spot> vec = new List<Spot>();
-            // initialize with initial probabilities
-            for (int i = LOWEST_ROLL; i <= HIGHEST_ROLL; ++i) 
-            {
-                vec.Add(new Spot(i, DiceRoll.P(i)));
-            }
+            List<Spot> vec = SingleRollProb();
 
             // just return vector of probabilities
             if (roll == 1) 
